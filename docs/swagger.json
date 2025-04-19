@@ -1,0 +1,403 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "API para gestionar series de televisión",
+        "title": "Series Tracker API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/api/series": {
+            "get": {
+                "description": "Obtiene una lista de todas las series en la base de datos",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Obtener todas las series",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Buscar por título",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "Watching",
+                            "Completed",
+                            "Dropped",
+                            "PlanToWatch"
+                        ],
+                        "type": "string",
+                        "description": "Filtrar por estado (e.g., 'Watching', 'Completed')",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "description": "Ordenar por (e.g., 'asc', 'desc')",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de series",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Series"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Crea una nueva serie en la base de datos",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Crear una nueva serie",
+                "parameters": [
+                    {
+                        "description": "Datos de la serie",
+                        "name": "series",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Series"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Serie creada",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/series/{id}": {
+            "get": {
+                "description": "Obtiene una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Obtener una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Serie encontrada",
+                        "schema": {
+                            "$ref": "#/definitions/main.Series"
+                        }
+                    },
+                    "404": {
+                        "description": "Serie no encontrada",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Actualiza una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Actualizar una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos de la serie",
+                        "name": "series",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Series"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Serie actualizada",
+                        "schema": {
+                            "$ref": "#/definitions/main.SuccessResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Elimina una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Eliminar una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Serie eliminada",
+                        "schema": {
+                            "$ref": "#/definitions/main.SuccessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error al eliminar la serie",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/series/{id}/downvote": {
+            "patch": {
+                "description": "Disminuye el ranking de una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Disminuir el ranking de una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ranking actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/main.SuccessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Serie no encontrada",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/series/{id}/episode": {
+            "patch": {
+                "description": "Actualiza el episodio de una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Actualizar el episodio de una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Episodio actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/main.SuccessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Serie no encontrada",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/series/{id}/status": {
+            "patch": {
+                "description": "Actualiza el estado de una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Actualizar el estado de una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "Watching",
+                            "Completed",
+                            "Dropped",
+                            "PlanToWatch"
+                        ],
+                        "type": "string",
+                        "description": "Nuevo estado de la serie (e.g., 'Watching', 'Completed')",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Estado actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/main.SuccessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Serie no encontrada",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/series/{id}/upvote": {
+            "patch": {
+                "description": "Aumenta el ranking de una serie específica por su ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "series"
+                ],
+                "summary": "Aumentar el ranking de una serie por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID de la serie",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ranking actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/main.SuccessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Serie no encontrada",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "Error es el mensaje de error",
+                    "type": "string"
+                }
+            }
+        },
+        "main.Series": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID es el identificador único de la serie",
+                    "type": "integer"
+                },
+                "lastEpisodeWatched": {
+                    "description": "LastEpisodeWatched es el último episodio visto por el usuario",
+                    "type": "integer"
+                },
+                "ranking": {
+                    "description": "Ranking es la calificación de la serie",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "Status es el estado de la serie (e.g., \"Plan to Watch\", \"Watching\", \"Dropped\", \"Completed\")",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "Title es el título de la serie",
+                    "type": "string"
+                },
+                "totalEpisodes": {
+                    "description": "TotalEpisodes es el total de episodios de la serie",
+                    "type": "integer"
+                }
+            }
+        },
+        "main.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "Message es el mensaje de éxito",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
