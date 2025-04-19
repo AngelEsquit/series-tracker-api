@@ -57,3 +57,11 @@ La API incluye documentación interactiva generada con Swagger.
 Una vez que el contenedor esté corriendo, puedes acceder a la documentación en tu navegador visitando:
 
 👉 [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+
+## 📬 Colección de Postman
+
+Puedes probar los endpoints de la API utilizando la siguiente colección de Postman:
+
+👉 [Abrir colección en Postman](https://angelesquit.postman.co/workspace/Angel-Esquit's-Workspace~6b3c6df4-f2c9-4a66-8550-c81b540553aa/collection/44134349-b9ee865e-c662-4a07-89b7-e0de63644f1e?action=share&creator=44134349)
+
+Recuerda tener el contenedor de la API corriendo antes de probar los endpoints.
