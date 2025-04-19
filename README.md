@@ -8,6 +8,7 @@ Este proyecto es una API REST escrita en Go utilizando el enrutador [`gorilla/mu
 - [gorilla/mux](https://github.com/gorilla/mux)
 - [SQLite](https://www.sqlite.org/index.html)
 - [Docker](https://www.docker.com/)
+- [Swagger (swaggo)](https://github.com/swaggo/swag)
 
 ## 📁 Estructura del Proyecto
 
@@ -48,3 +49,11 @@ docker ps
 docker exec -it <id o nombre> sh
 sqlite3 series.db
 ```
+
+## 📄 Documentación con Swagger
+
+La API incluye documentación interactiva generada con Swagger.
+
+Una vez que el contenedor esté corriendo, puedes acceder a la documentación en tu navegador visitando:
+
+👉 [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
